@@ -16,14 +16,14 @@ import datetime
 
 # Initialize the video stream
 print("[INFO] starting cameras...")
-leftStream = cv2.VideoCapture(0)
-rightStream = cv2.VideoCapture(1)
+leftStream = cv2.VideoCapture(1)
+rightStream = cv2.VideoCapture(2)
 
 # Set the width and unseccusfuly set the exposure time
 leftStream.set(3, 400)
-#leftStream.set(15,0.5) # Warmup the first camera
+leftStream.set(15,0.5) # Warmup the first camera
 rightStream.set(3, 400)
-#rightStream.set(15, 0.5) # Warmup the second camera
+rightStream.set(15, 0.5) # Warmup the second camera
 
 # Warmup the cameras
 #time.sleep(2.0)s
@@ -48,12 +48,14 @@ while True:
 
     if status == 0:
         # Convert the panorama to grayscale and blur it slightly
-        gray = cv2.cvtColor(result, cv2.COLOR_BGR2GRAY)
-        gray = cv2.GaussianBlur(gray, (21, 21), 0)
+        stitched = cv2.cvtColor(stitched, cv2.COLOR_BGR2GRAY)
+        stitched = cv2.GaussianBlur(stitched, (21, 21), 0)
 
         cv2.imshow("Result", stitched)
-        cv2.imshow("Left Frame", left)
-        cv2.imshow("Right Frame", right)
+        #
+        cv2.imshow("Left Frame", frameLeft)
+        #
+        cv2.imshow("Right Frame", frameRight )
 
         key = cv2.waitKey(1) & 0xFF
 
@@ -67,4 +69,4 @@ while True:
 print("[INFO] cleaning up...")
 leftStream.release()
 rightStream.release()
-cv2.DestroyAllWindows()
+cv2.destroyAllWindows()
